@@ -1,1 +1,2 @@
 //funções utilitárias/helpers
+export {};

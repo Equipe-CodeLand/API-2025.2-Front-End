@@ -1,1 +1,2 @@
 // componentes reutilizáveis (botões, inputs, tabelas, etc.)
+export {};
