@@ -1,2 +1,0 @@
-//funções utilitárias/helpers
-export {};
