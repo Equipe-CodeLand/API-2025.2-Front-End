@@ -1,5 +1,6 @@
 // componentes reutilizáveis (botões, inputs, tabelas, etc.)
 import React from "react";
+import '../styles/button.css';
 
 type ButtonProps = {
   label: string;
