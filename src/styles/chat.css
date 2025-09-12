@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #2f3338; /* fundo escuro */
   padding: 10px;
 }
 
@@ -37,7 +36,7 @@
   display: flex;
   gap: 8px;
   padding: 10px;
-  background: #1e1e1e;
+  background: #393E46;
   border-radius: 8px;
 }
 

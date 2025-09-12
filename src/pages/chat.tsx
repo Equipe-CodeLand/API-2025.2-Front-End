@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./chat.css";
+import "../styles/chat.css";
 
 interface Message {
   id: number;
