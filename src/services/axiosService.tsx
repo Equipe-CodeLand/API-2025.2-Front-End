@@ -29,3 +29,13 @@ export async function cadastrarUsuario(nome: string, email: string, senha: strin
 
   return response.data;
 }
+
+export async function listarUsuarios() {
+  const response = await api.get("/usuarios");
+  return response.data;
+}
+
+export async function listarUsuario(id: number) {
+  const response = await api.get(`/usuarios/${id}`);
+  return response.data;
+}

@@ -90,7 +90,7 @@ const handleCadastro = async (e: React.FormEvent) => {
           <select value={cargo} onChange={(e) => setCargo(e.target.value)}>
             <option value="">Selecione um cargo</option>
             <option value="Administrador">Administrador</option>
-            <option value="Funcionario">Funcionário</option>
+            <option value="Funcionário">Funcionário</option>
           </select>
         </label>
 
