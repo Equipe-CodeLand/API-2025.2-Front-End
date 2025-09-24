@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://localhost:5000",
+  baseURL: "http://localhost:4000",
   headers: {
     "Content-Type": "application/json",
   },
@@ -15,5 +15,27 @@ export async function enviarMensagem(pergunta: string) {
 
 export async function buscarResposta() {
   const response = await api.get("/chat/resposta");
+  return response.data;
+}
+
+export async function cadastrarUsuario(nome: string, email: string, senha: string, cargo: string, receberEmails: boolean) {
+  const response = await api.post("/cadastro/usuario", {
+    nome,
+    email,
+    senha,
+    cargo,
+    receberEmails,
+  });
+
+  return response.data;
+}
+
+export async function listarUsuarios() {
+  const response = await api.get("/usuarios");
+  return response.data;
+}
+
+export async function listarUsuario(id: number) {
+  const response = await api.get(`/usuarios/${id}`);
   return response.data;
 }

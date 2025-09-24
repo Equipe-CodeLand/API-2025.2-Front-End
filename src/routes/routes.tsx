@@ -4,10 +4,14 @@ import Home from '../pages/home';
 import Chat from '../pages/chat';
 import Login from '../pages/login';
 import { isAuthenticated } from '../utils/auth';
+import CadastroUsuario from '../pages/cadastroUsuario';
+import Relatorios from '../pages/relatorios';
+import Usuarios from '../pages/usuarios';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return isAuthenticated() ? <>{children}</> : <Navigate to="/login" />;
 }
+
 
 export function AppRoutes() {
   return (
@@ -30,6 +34,30 @@ export function AppRoutes() {
           </ProtectedRoute>
         } 
       />
+      <Route
+        path="/cadastro/usuario"
+        element={
+          <ProtectedRoute>
+            <CadastroUsuario/>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/relatorios" 
+        element={
+          <ProtectedRoute>
+            <Relatorios />
+          </ProtectedRoute>
+        }
+       />
+      <Route 
+        path="/usuarios" 
+        element={
+          <ProtectedRoute>
+            <Usuarios />
+          </ProtectedRoute>
+        }
+       />
     </Routes>
   );
 }

@@ -7,7 +7,7 @@ import "../styles/login.css";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function Login() {
 
     try {
       console.log("Tentando fazer login com URL:", API_URL);
-      const res = await axios.post(`${API_URL}/auth/login`, { username, password });
+      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
       
       if (res.data.token) {
         setToken(res.data.token);
@@ -43,9 +43,9 @@ export default function Login() {
       <form onSubmit={handleLogin}>
         <input 
           type="text" 
-          placeholder="Username" 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)} 
+          placeholder="Email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
           required 
         />
         <input 

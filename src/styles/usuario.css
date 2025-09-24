@@ -1,0 +1,240 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.usuario-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh;
+  background: #393E46;
+  width: 100%;
+  box-sizing: border-box;
+}
+.usuario-container .title-content{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background: #242628;
+  padding: 0 100px;
+}
+.line-content{
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+.usuario-container .title-content .title-text .line{
+  background-color: #8A00C4;
+  width: 10px;
+  height: 20px;
+}
+.usuario-container .title-content .title-text .line-last {
+  height: 30px;
+}
+.usuario-container .title-content .title-text{
+  text-align: right;
+
+}
+.usuario-container .title-content .main-title {
+  font-size: 2.3rem;
+  color: #fff;
+  margin-bottom: 0;
+}
+.usuario-container .title-content .subtitle {
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  color: #c9c9c9;
+}
+
+
+/* seção dos filtros */
+.usuario-filter-container{
+  background: #242628;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 12px;
+}
+.usuario-filter-container .usuario-filter-content{
+  display: flex;
+  justify-content: space-between  ;
+  gap: 20px;
+  padding: 20px 100px;
+}
+.usuario-filter-content .usuario-filter-item{
+  display: flex;
+  gap: 16px;
+}
+
+.usuario-filter-content select {
+  background-color: #393E46;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  padding: 18px 14px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.usuario-filter-content select option {
+  background-color: #2b2b2b;
+  color: #fff;
+}
+
+.filter-input:focus,
+.usuario-filter-content select:focus {
+  border: 1px solid #ccc !important;
+  outline: none;
+}
+
+
+/* seção da listagem dos usuarios */
+.usuario-listing-content{
+  width: 100%;
+  height: 100%;
+}
+.usuario-listing-content .usuario-content{
+  padding: 8px 100px;
+}
+.usuario-details {
+  background: #2b2b2b;
+  border-radius: 10px;
+  padding: 0;
+  color: #fff;
+  overflow: hidden;
+}
+
+.usuario-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #242628;
+  cursor: pointer;
+}
+
+.usuario-summary-left {
+  display: grid;
+  grid-template-columns: 200px 150px 250px;
+  gap: 80px;
+  font-size: 1rem;
+  color: #fff;
+  align-items: center;
+}
+
+.usuario-summary-left h1,
+.usuario-summary-left span {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.usuario-summary-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit, .btn-delete {
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  color: #fff;
+  width: 120px;
+}
+
+.btn-edit {
+  background-color: #8A00C4;
+}
+
+.btn-delete {
+  background-color: #CC1C1C;
+}
+
+
+.usuario-body {
+  padding: 16px;
+  background: #2f3337;
+  font-size: 14px;
+  line-height: 1.5;
+  border-top: 1px solid #444;
+}
+
+@media(max-width:911px){
+.usuario-container .title-content {
+    padding: 0 20px;
+  }
+
+.usuario-container .usuario-filter-content {
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+  }
+  .usuario-filter-content .usuario-filter-item {
+    flex-direction: column;
+  }
+  .usuario-listing-content .usuario-content {
+    padding: 20px;
+  }
+  .usuario-summary-left {
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    font-size: 18px;
+  }
+}
+
+@media(max-width:911px){
+  .usuario-container .title-content {
+      padding: 0 20px;
+      flex-direction: column;
+      gap: 8px;
+  }
+
+  .usuario-filter-container .usuario-filter-content {
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 20px;
+      gap: 16px;
+  }
+
+  .usuario-filter-content .usuario-filter-item {
+      flex-direction: column;
+      gap: 12px;
+  }
+
+  .usuario-filter-content select,
+  .filter-input {
+      width: 100%;
+  }
+
+  .usuario-listing-content .usuario-content {
+      padding: 10px 20px;
+  }
+
+  .usuario-summary-left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      grid-template-columns: unset;
+      font-size: 1rem;
+    }
+
+  .usuario-summary-buttons {
+      margin-top: 8px;
+      flex-wrap: wrap;
+      gap: 6px;
+  }
+
+  .btn-edit,
+  .btn-delete {
+      width: auto; 
+      padding: 6px 12px;
+      font-size: 0.85rem;
+  }
+}
