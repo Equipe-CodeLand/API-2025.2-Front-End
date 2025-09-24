@@ -8,8 +8,9 @@
 
 .logo {
     margin: 0 4%;
-    width: 75%; /* tamanho fixo para a logo */
+    max-width: 200px; /* largura máxima ao invés de porcentagem */
     height: auto;
+    flex-shrink: 0; /* evita que a logo encolha */
 }
 
 .rotas {
