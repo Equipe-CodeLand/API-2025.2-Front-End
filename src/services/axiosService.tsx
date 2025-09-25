@@ -39,3 +39,14 @@ export async function listarUsuario(id: number) {
   const response = await api.get(`/usuarios/${id}`);
   return response.data;
 }
+
+
+export async function buscarRelatoriosGerais(){
+  const response = await api.get("/relatorios/geral");
+  return response.data;
+}
+
+export async function buscarRelatoriosSkus(){
+  const response = await api.get("/relatorios/skus");
+  return response.data;
+}
