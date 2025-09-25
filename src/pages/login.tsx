@@ -18,7 +18,7 @@ export default function Login() {
 
     try {
       console.log("Tentando fazer login com URL:", API_URL);
-      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+      const res = await axios.post(`${API_URL}/api/login`, { email, password });
       
       if (res.data.token) {
         setToken(res.data.token);
@@ -43,7 +43,7 @@ export default function Login() {
       <form onSubmit={handleLogin}>
         <input 
           type="text" 
-          placeholder="Email" 
+          placeholder="email" 
           value={email} 
           onChange={(e) => setEmail(e.target.value)} 
           required 
