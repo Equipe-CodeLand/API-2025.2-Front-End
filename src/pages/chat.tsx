@@ -3,7 +3,10 @@ import "../styles/chat.css";
 import Mensagem from "../types/mensagem";
 import { Button } from "../components/button";
 import feather from "feather-icons";
-import { buscarResposta, enviarMensagem } from "../services/axiosService";
+import {
+  buscarRelatoriosGerais,
+  buscarRelatoriosSkus,
+} from "../services/axiosService";
 
 export default function Chat() {
   const [messages, setMessages] = useState<Mensagem[]>([]);
@@ -11,7 +14,19 @@ export default function Chat() {
 
   useEffect(() => {
     feather.replace();
-  });
+    const hora = new Date().getHours();
+    let saudacao = "";
+    if (hora >= 5 && hora < 12) saudacao = "Bom dia";
+    else if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
+    else saudacao = "Boa noite";
+
+    const mensagemInicial: Mensagem = {
+      id: Date.now(),
+      sender: "other", // "other" = bot
+      text: `${saudacao}! No que posso te ajudar hoje?`,
+    };
+    setMessages([mensagemInicial]);
+  }, []);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -25,10 +40,21 @@ export default function Chat() {
     setInput("");
 
     try {
-      await enviarMensagem(input);
+      let resposta = "";
 
-      const respostaData = await buscarResposta();
-      const resposta = respostaData.resposta;
+      // =========================
+      // Aqui está o "roteador"
+      // =========================
+      if (input.toLowerCase().includes("relatório geral")) {
+        const dados = await buscarRelatoriosGerais();
+        resposta = JSON.stringify(dados, null, 2); // formata como JSON legível
+      } else if (input.toLowerCase().includes("relatório por sku")) {
+        const dados = await buscarRelatoriosSkus();
+        resposta = JSON.stringify(dados, null, 2);
+      } else {
+        resposta =
+          "Olá, Você pode obter mais informações sobre os relatórios digitando por 'relatório geral' ou 'relatório por SKU'.";
+      }
 
       const botMessage: Mensagem = {
         id: Date.now() + 1,
@@ -48,30 +74,14 @@ export default function Chat() {
     }
   };
 
-  const hora = new Date().getHours();
-  let saudacao = "";
-  if (hora >= 5 && hora < 12) {
-    saudacao = "Bom dia";
-  } else if (hora >= 12 && hora < 18) {
-    saudacao = "Boa tarde";
-  } else {
-    saudacao = "Boa noite";
-  }
-
   return (
     <div className="chat-container">
-      {messages.length === 0 && (
-        <div className="greeting-container">
-          <h2 className="chat-greeting">{saudacao}!</h2>
-          <p className="chat-instruction">No que posso te ajudar hoje?</p>
-        </div>
-      )}
-
       <div className="chat-messages">
         {messages.map((msg) => (
           <div
             key={msg.id}
             className={`chat-bubble ${msg.sender === "me" ? "me" : "other"}`}
+            style={{ whiteSpace: "pre-line" }}
           >
             {msg.text}
           </div>
@@ -79,16 +89,16 @@ export default function Chat() {
       </div>
 
       <div className="chat-input">
-        <i 
-            data-feather="plus-circle" 
-            className="chat-plus-icon"
-            onClick={() => {
-                setMessages([]);
-                setInput("");
-            }}
-            style={{ cursor: "pointer" }}
-            title="Novo chat">
-        </i>
+        <i
+          data-feather="plus-circle"
+          className="chat-plus-icon"
+          onClick={() => {
+            setMessages([]);
+            setInput("");
+          }}
+          style={{ cursor: "pointer" }}
+          title="Novo chat"
+        ></i>
         <input
           type="text"
           placeholder="Digite sua mensagem"

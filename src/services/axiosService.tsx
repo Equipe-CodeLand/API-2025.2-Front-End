@@ -1,5 +1,6 @@
 // serviços externos (APIs, Firebase, Axios, etc.)
 import axios from "axios";
+import { getToken } from "../utils/auth";
 
 export const api = axios.create({
   baseURL: "http://localhost:4000",
@@ -8,14 +9,16 @@ export const api = axios.create({
   },
 });
 
-export async function enviarMensagem(pergunta: string) {
-  const response = await api.post("/chat", { pergunta });
-  return response.data;
-}
+export const relatorioApi = axios.create({
+  baseURL: "http://localhost:5000", 
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export async function buscarResposta() {
-  const response = await api.get("/chat/resposta");
-  return response.data;
+function authHeader() {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 export async function cadastrarUsuario(nome: string, email: string, senha: string, cargo: string, receberEmails: boolean) {
@@ -40,13 +43,30 @@ export async function listarUsuario(id: number) {
   return response.data;
 }
 
-
-export async function buscarRelatoriosGerais(){
-  const response = await api.get("/relatorios/geral");
+export async function buscarRelatoriosGerais() {
+  const response = await api.post(
+    "/api/relatorio/geral",
+    {},
+    { headers: authHeader() },
+  );
   return response.data;
 }
 
-export async function buscarRelatoriosSkus(){
-  const response = await api.get("/relatorios/skus");
+export async function buscarRelatoriosSkus() {
+  const response = await api.post(
+    "/api/relatorio/skus",
+    {},
+    { headers: authHeader() },
+  );
+  return response.data;
+}
+
+export async function buscarRelatoriosDoUsuario() {
+  const token = getToken(); // função que você já tem
+  const response = await api.get("/api/relatorio/listar", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 }

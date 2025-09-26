@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/relatorio.css";
 import { Button } from "../components/button";
 import Input from "../components/filter-input";
+import { buscarRelatoriosDoUsuario } from "../services/axiosService";
+import { useNavigate } from "react-router-dom";
 
 type Filters = {
   nome: string;
@@ -10,15 +12,27 @@ type Filters = {
 };
 
 export default function Relatorios() {
-  const [filters, setFilters] = useState({
-    nome: "",
-    data: "",
-    quantidade: "",
-  });
+ const [relatorios, setRelatorios] = useState<any[]>([]);
+ const [filters, setFilters] = useState({ nome: "", data: "", quantidade: "" });
+ const navigate = useNavigate();
 
-  const handleChange = (field: keyof Filters, value: string) => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
-  };
+ useEffect(() => {
+   async function fetchRelatorios() {
+     const dados = await buscarRelatoriosDoUsuario();
+     setRelatorios(dados);
+   }
+   fetchRelatorios();
+ }, []);
+
+ const handleChange = (field: keyof Filters, value: string) => {
+   setFilters((prev) => ({ ...prev, [field]: value }));
+ };
+
+ const filtrarRelatorios = relatorios.filter((r) => {
+   const nomeOk = r.titulo.toLowerCase().includes(filters.nome.toLowerCase());
+   const dataOk = filters.data ? r.criado_em.startsWith(filters.data) : true;
+   return nomeOk && dataOk;
+ });
 
   return (
     <div className="relatorio-container">
@@ -56,71 +70,33 @@ export default function Relatorios() {
             />
           </div>
           <div className="filter-item">
-            <Button label={"Novo Relatório"} />
+            <Button
+              label={"Novo Relatório"}
+              onClick={() => navigate("/chat")}
+            />
           </div>
         </div>
       </div>
 
       <div className="relatorio-listing-content">
         <div className="relatorio-content">
-          <details className="relatorio-details">
-            <summary className="relatorio-summary">
-              <div className="summary-left">
-                <h1>Relatório 1</h1>
-                <span>19/09/2025</span>
+          {filtrarRelatorios.map((rel) => (
+            <details key={rel.id} className="relatorio-details">
+              <summary className="relatorio-summary">
+                <div className="summary-left">
+                  <h1>{rel.titulo}</h1>
+                  <span>{new Date(rel.criado_em).toLocaleDateString()}</span>
+                </div>
+                <Button label={"Enviar por Email"} />
+              </summary>
+              <div
+                className="relatorio-body"
+                style={{ whiteSpace: "pre-line" }}
+              >
+                <p>{rel.conteudo}</p>
               </div>
-              <Button label={"Enviar por Email"} />
-            </summary>
-
-            <div className="relatorio-body">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas mattis justo dui, et porta odio pellentesque et. Donec
-                facilisis rhoncus eleifend. Etiam ligula ex, fermentum porttitor
-                auctor a, vestibulum eget ipsum. Aenean mollis posuere turpis,
-                vel molestie nibh convallis a. Etiam a nibh non odio gravida
-                ornare. Mauris vel ante ultricies lorem placerat ultricies.
-                Donec commodo, tortor in efficitur ultrices, ligula erat
-                hendrerit ligula, ut vulputate lorem mauris at justo. Nullam
-                tristique, odio ac faucibus viverra, massa nulla sollicitudin
-                erat, nec faucibus felis elit quis leo. Ut auctor ac felis et
-                scelerisque. Nullam luctus sodales orci sed cursus. Quisque
-                mattis vitae dolor id hendrerit. Aenean iaculis pulvinar est.
-                Fusce ultrices auctor orci, vitae interdum purus interdum eu.
-                Donec pharetra nunc sed interdum feugiat. Sed nec imperdiet
-                orci, vel aliquam nibh. Phasellus ac elit massa.
-              </p>
-            </div>
-          </details>
-          <details className="relatorio-details">
-            <summary className="relatorio-summary">
-              <div className="summary-left">
-                <h1>Relatório 2</h1>
-                <span>19/09/2025</span>
-              </div>
-              <Button label={"Enviar por Email"} />
-            </summary>
-
-            <div className="relatorio-body">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas mattis justo dui, et porta odio pellentesque et. Donec
-                facilisis rhoncus eleifend. Etiam ligula ex, fermentum porttitor
-                auctor a, vestibulum eget ipsum. Aenean mollis posuere turpis,
-                vel molestie nibh convallis a. Etiam a nibh non odio gravida
-                ornare. Mauris vel ante ultricies lorem placerat ultricies.
-                Donec commodo, tortor in efficitur ultrices, ligula erat
-                hendrerit ligula, ut vulputate lorem mauris at justo. Nullam
-                tristique, odio ac faucibus viverra, massa nulla sollicitudin
-                erat, nec faucibus felis elit quis leo. Ut auctor ac felis et
-                scelerisque. Nullam luctus sodales orci sed cursus. Quisque
-                mattis vitae dolor id hendrerit. Aenean iaculis pulvinar est.
-                Fusce ultrices auctor orci, vitae interdum purus interdum eu.
-                Donec pharetra nunc sed interdum feugiat. Sed nec imperdiet
-                orci, vel aliquam nibh. Phasellus ac elit massa.
-              </p>
-            </div>
-          </details>
+            </details>
+          ))}
         </div>
       </div>
     </div>
