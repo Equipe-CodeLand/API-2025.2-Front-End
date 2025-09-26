@@ -1,0 +1,92 @@
+.cadastro-container {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 30px 35px;
+  border-radius: 12px;
+  background: #242628;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+.cadastro-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #5a5e61;
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cadastro-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ddd;
+  width: 100%; 
+}
+
+.cadastro-form input,
+.cadastro-form select {
+  width: 95%;
+  padding: 12px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 6px;
+  background: #171818;
+  color: #fff;
+  font-size: 1rem;
+  transition: border 0.2s ease-in-out, background 0.2s;
+  box-sizing: border-box;
+}
+
+
+.cadastro-form input:focus,
+.cadastro-form select:focus {
+  background: #1e1e1e;
+  border: 1px solid #8A00C4;
+}
+
+.custom-button {
+  margin-top: 15px;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #8A00C4;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.custom-button:hover {
+  background: #6b0099;
+}
+
+.checkbox-label {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: #ddd;
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  accent-color: #8A00C4;
+  margin: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0;
+  background: transparent !important;
+}

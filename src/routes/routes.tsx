@@ -1,18 +1,63 @@
 import '../index.css';
-import reportWebVitals from '../reportWebVitals'; 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from '../pages/home';
 import Chat from '../pages/chat';
+import Login from '../pages/login';
+import { isAuthenticated } from '../utils/auth';
+import CadastroUsuario from '../pages/cadastroUsuario';
+import Relatorios from '../pages/relatorios';
+import Usuarios from '../pages/usuarios';
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  return isAuthenticated() ? <>{children}</> : <Navigate to="/login" />;
+}
+
 
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/chat" element={<Chat />} />
-      {/* Adicione outras rotas aqui */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route 
+        path="/home" 
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/chat" 
+        element={
+          <ProtectedRoute>
+            <Chat />
+          </ProtectedRoute>
+        } 
+      />
+      <Route
+        path="/cadastro/usuario"
+        element={
+          <ProtectedRoute>
+            <CadastroUsuario/>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/relatorios" 
+        element={
+          <ProtectedRoute>
+            <Relatorios />
+          </ProtectedRoute>
+        }
+       />
+      <Route 
+        path="/usuarios" 
+        element={
+          <ProtectedRoute>
+            <Usuarios />
+          </ProtectedRoute>
+        }
+       />
     </Routes>
   );
 }
-
-reportWebVitals();

@@ -1,0 +1,12 @@
+.filter-input {
+  background-color: #393E46;
+  color: #fff;
+  border: none;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  padding: 18px 14px;
+}
+.filter-input::placeholder {
+  color: #fff;
+  opacity: 1;
+}
