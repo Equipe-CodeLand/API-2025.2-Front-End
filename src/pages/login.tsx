@@ -16,9 +16,18 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
+    // More aggressive cleaning of the password
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.replace(/\s+/g, '').trim();
+
+    console.log(`Login attempt for ${trimmedEmail} (password length: ${trimmedPassword.length})`);
     try {
       console.log("Tentando fazer login com URL:", API_URL);
-      const res = await axios.post(`${API_URL}/api/login`, { email, password });
+      
+      const res = await axios.post(`${API_URL}/api/login`, { 
+        email: trimmedEmail, 
+        password: trimmedPassword 
+      });
       
       if (res.data.token) {
         setToken(res.data.token);
@@ -28,11 +37,12 @@ export default function Login() {
       }
     } catch (err: any) {
       console.error("Erro no login:", err);
+      console.error("Detalhes do erro:", err.response?.data);
       
       if (err.code === 'ERR_NETWORK') {
         setError("Erro de conexão. Verifique se o backend está rodando.");
       } else {
-        setError("Usuário ou senha inválidos");
+        setError(err.response?.data?.error || "Usuário ou senha inválidos");
       }
     }
   }
@@ -42,19 +52,21 @@ export default function Login() {
       <img src="/logoDomRock.png" alt="Logo" className="logo-login" />
       <form onSubmit={handleLogin}>
         <input 
-          type="text" 
-          placeholder="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required 
-        />
+        type="text" 
+        placeholder="email" 
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)} 
+        required 
+        autoComplete="username"
+      />
+      <input 
+        type="password" 
+        placeholder="Password" 
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)} 
+        required 
+        autoComplete="current-password"
+      />
         <button type="submit">LOG IN</button>
       </form>
       {error && <p className="login-error">{error}</p>}

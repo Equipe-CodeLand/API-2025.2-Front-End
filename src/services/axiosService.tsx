@@ -11,7 +11,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -51,7 +51,7 @@ export async function listarUsuario(id: number) {
 }
 
 export async function deletarUsuario(id: number) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const response = await api.delete(`api/usuario/deletar/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
