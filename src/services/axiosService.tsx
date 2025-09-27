@@ -70,3 +70,12 @@ export async function buscarRelatoriosDoUsuario() {
   });
   return response.data;
 }
+
+export async function enviarRelatorioPorEmail(relatorioId: number) {
+  const response = await api.post(
+    "/api/relatorio/enviar-email",
+    { relatorioId },
+    { headers: authHeader() }
+  );
+  return response.data;
+}
