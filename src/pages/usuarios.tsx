@@ -44,48 +44,68 @@ export default function Usuarios() {
     fetchUsuarios();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    Swal.fire({
-      title: "Tem certeza?",
-      text: "Essa ação não poderá ser desfeita!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#CC1C1C",
-      cancelButtonColor: "#8A00C4",
-      confirmButtonText: "Sim, excluir",
-      cancelButtonText: "Cancelar",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await deletarUsuario(id);
+const handleDelete = async (id: number) => {
+  const result = await Swal.fire({
+    title: "Tem certeza?",
+    text: "Essa ação não poderá ser desfeita!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sim, excluir",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "#8A00C4",
+    cancelButtonColor: "#CC1C1C", 
+  });
 
-          // atualizar lista local
-          setUsuarios(prev => prev.filter(u => u.id !== id));
+  if (result.isConfirmed) {
+    try {
+      await deletarUsuario(id);
 
+      // atualizar lista local
+      setUsuarios(prev => prev.filter(u => u.id !== id));
+
+      await Swal.fire({
+        title: "Excluído!",
+        text: "O usuário foi removido com sucesso.",
+        icon: "success",
+        confirmButtonColor: "#8A00C4",
+      });
+    } catch (error: any) {
+      console.error("Erro ao excluir usuário:", error);
+
+      if (error.response) {
+        if (error.response.status === 403) {
           Swal.fire({
-            title: "Excluído!",
-            text: "O usuário foi removido com sucesso.",
-            icon: "success",
+            title: "Atenção",
+            text: "Você não pode excluir sua própria conta.",
+            icon: "warning",
             confirmButtonColor: "#8A00C4",
           });
-        } catch (error: any) {
-          console.error("Erro ao excluir usuário:", error);
-
-          if (error.response) {
-            if (error.response.status === 403) {
-              Swal.fire("Atenção", "Você não pode excluir sua própria conta.", "warning");
-            } else if (error.response.data?.error) {
-              Swal.fire("Erro", error.response.data.error, "error");
-            } else {
-              Swal.fire("Erro", "Não foi possível excluir o usuário.", "error");
-            }
-          } else {
-            Swal.fire("Erro", "Falha de conexão com o servidor.", "error");
-          }
+        } else if (error.response.data?.error) {
+          Swal.fire({
+            title: "Erro",
+            text: error.response.data.error,
+            icon: "error",
+            confirmButtonColor: "#8A00C4",
+          });
+        } else {
+          Swal.fire({
+            title: "Erro",
+            text: "Não foi possível excluir o usuário.",
+            icon: "error",
+            confirmButtonColor: "#8A00C4",
+          });
         }
+      } else {
+        Swal.fire({
+          title: "Erro",
+          text: "Falha de conexão com o servidor.",
+          icon: "error",
+          confirmButtonColor: "#8A00C4",
+        });
       }
-    });
-  };
+    }
+  }
+};
 
 
   const handleEditClick = (usuario: any) => {
