@@ -117,8 +117,8 @@ body, html {
 
 .usuario-summary-left {
   display: grid;
-  grid-template-columns: 200px 150px 250px;
-  gap: 80px;
+  grid-template-columns: 250px 170px 300px 170px;
+  gap: 30px;
   font-size: 1rem;
   color: #fff;
   align-items: center;
@@ -138,7 +138,7 @@ body, html {
   gap: 8px;
 }
 
-.btn-edit, .btn-delete {
+.btn-edit, .btn-delete, .btn-save, .btn-cancel {
   font-size: 0.9rem;
   border: none;
   border-radius: 25px;
@@ -147,14 +147,35 @@ body, html {
   width: 120px;
 }
 
-.btn-edit {
+.btn-edit, .btn-save {
   background-color: #8A00C4;
 }
 
-.btn-delete {
+.btn-delete, .btn-cancel {
   background-color: #CC1C1C;
 }
 
+.usuario-summary-left select {
+  background-color: #393E46;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  padding: 18px 14px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.usuario-summary-left select option {
+  background-color: #2b2b2b;
+  color: #fff;
+}
+
+.usuario-summary-left select:focus {
+  border: 1px solid #ccc !important;
+  outline: none;
+}
 
 .usuario-body {
   padding: 16px;
@@ -164,30 +185,6 @@ body, html {
   border-top: 1px solid #444;
 }
 
-@media(max-width:911px){
-.usuario-container .title-content {
-    padding: 0 20px;
-  }
-
-.usuario-container .usuario-filter-content {
-    justify-content: space-between;
-    flex-direction: column;
-    padding: 20px;
-    gap: 16px;
-  }
-  .usuario-filter-content .usuario-filter-item {
-    flex-direction: column;
-  }
-  .usuario-listing-content .usuario-content {
-    padding: 20px;
-  }
-  .usuario-summary-left {
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-    font-size: 18px;
-  }
-}
 
 @media(max-width:911px){
   .usuario-container .title-content {
@@ -221,18 +218,39 @@ body, html {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      grid-template-columns: unset;
       font-size: 1rem;
-    }
+  }
+
+  .usuario-summary-left input,
+  .usuario-summary-left select {
+      width: 100%;
+      height: 40px;
+      font-size: 14px;
+      box-sizing: border-box;
+      padding: 10px 14px;
+  }
+
+  .usuario-summary-left label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+  }
+
+  .usuario-summary-left label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+  }
 
   .usuario-summary-buttons {
       margin-top: 8px;
-      flex-wrap: wrap;
+      display: flex;
       gap: 6px;
   }
 
   .btn-edit,
-  .btn-delete {
+  .btn-delete,
+  .btn-save,
+  .btn-cancel {
       width: auto; 
       padding: 6px 12px;
       font-size: 0.85rem;
