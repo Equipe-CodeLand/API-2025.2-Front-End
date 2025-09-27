@@ -58,9 +58,16 @@ export default function Usuarios() {
       if (result.isConfirmed) {
         try {
           await deletarUsuario(id);
-          Swal.fire("Excluído!", "O usuário foi removido com sucesso.", "success");
 
-          setUsuarios((prev) => prev.filter((u) => u.id !== id));
+          // atualizar lista local
+          setUsuarios(prev => prev.filter(u => u.id !== id));
+
+          Swal.fire({
+            title: "Excluído!",
+            text: "O usuário foi removido com sucesso.",
+            icon: "success",
+            confirmButtonColor: "#8A00C4",
+          });
         } catch (error: any) {
           console.error("Erro ao excluir usuário:", error);
 
@@ -79,6 +86,7 @@ export default function Usuarios() {
       }
     });
   };
+
 
   const handleEditClick = (usuario: any) => {
     setEditId(usuario.id);
@@ -125,9 +133,9 @@ export default function Usuarios() {
     setFilters(prev => ({ ...prev, [field]: value }));
   };
 
-const handleEditChange = (field: keyof Filters | string, value: any) => {
-  setEditData((prev: Record<string, any>) => ({ ...prev, [field]: value }));
-};
+  const handleEditChange = (field: keyof Filters | string, value: any) => {
+    setEditData((prev: Record<string, any>) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <div className="usuario-container">
