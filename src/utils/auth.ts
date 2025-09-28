@@ -1,13 +1,13 @@
 export function setToken(token: string) {
-  localStorage.setItem("token", token);
+  sessionStorage.setItem("token", token);
 }
 
 export function getToken(): string | null {
-  return localStorage.getItem("token");
+  return sessionStorage.getItem("token");
 }
 
 export function removeToken() {
-  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
 }
 
 export function isAuthenticated(): boolean {
@@ -17,4 +17,21 @@ export function isAuthenticated(): boolean {
   const payload = JSON.parse(atob(token.split(".")[1]));
   const now = Date.now() / 1000;
   return !payload.exp || payload.exp > now;
+}
+
+export function getUserRole(): string | null {
+  const token = getToken();
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.cargo || null;
+  } catch (e) {
+    console.error("Error parsing JWT token:", e);
+    return null;
+  }
+}
+
+export function isAdmin(): boolean {
+  return getUserRole() === 'Administrador';
 }
