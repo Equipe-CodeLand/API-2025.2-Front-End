@@ -13,66 +13,66 @@ type Filters = {
 };
 
 export default function Relatorios() {
- const [relatorios, setRelatorios] = useState<any[]>([]);
- const [filters, setFilters] = useState({ nome: "", data: "", quantidade: "" });
- const navigate = useNavigate();
+  const [relatorios, setRelatorios] = useState<any[]>([]);
+  const [filters, setFilters] = useState({ nome: "", data: "", quantidade: "" });
+  const navigate = useNavigate();
 
- useEffect(() => {
-   async function fetchRelatorios() {
-     const dados = await buscarRelatoriosDoUsuario();
-     setRelatorios(dados);
-   }
-   fetchRelatorios();
- }, []);
+  useEffect(() => {
+    async function fetchRelatorios() {
+      const dados = await buscarRelatoriosDoUsuario();
+      setRelatorios(dados);
+    }
+    fetchRelatorios();
+  }, []);
 
- const handleChange = (field: keyof Filters, value: string) => {
-   setFilters((prev) => ({ ...prev, [field]: value }));
- };
+  const handleChange = (field: keyof Filters, value: string) => {
+    setFilters((prev) => ({ ...prev, [field]: value }));
+  };
 
- const filtrarRelatorios = relatorios.filter((r) => {
-   const nomeOk = r.titulo.toLowerCase().includes(filters.nome.toLowerCase());
-   const dataOk = filters.data ? r.criado_em.startsWith(filters.data) : true;
-   return nomeOk && dataOk;
- });
+  const filtrarRelatorios = relatorios.filter((r) => {
+    const nomeOk = r.titulo.toLowerCase().includes(filters.nome.toLowerCase());
+    const dataOk = filters.data ? r.criado_em.startsWith(filters.data) : true;
+    return nomeOk && dataOk;
+  });
 
- const handleEnviarEmail = async (relatorioId: number, tituloRelatorio: string) => {
-  try {
-    const result = await Swal.fire({
-      title: 'Confirmar envio',
-      text: `Enviar "${tituloRelatorio}" por email?`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#8A00C4',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Enviar',
-      cancelButtonText: 'Cancelar'
-    });
-
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: 'Enviando...',
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading()
+  const handleEnviarEmail = async (relatorioId: number, tituloRelatorio: string) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Confirmar envio',
+        text: `Enviar "${tituloRelatorio}" por email?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8A00C4',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Enviar',
+        cancelButtonText: 'Cancelar'
       });
 
-      const response = await enviarRelatorioPorEmail(relatorioId);
-      
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Enviando...',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading()
+        });
+
+        const response = await enviarRelatorioPorEmail(relatorioId);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso!',
+          text: `Email enviado para: ${response.emailEnviado}`,
+          confirmButtonColor: '#8A00C4'
+        });
+      }
+    } catch (error: any) {
       Swal.fire({
-        icon: 'success',
-        title: 'Sucesso!',
-        text: `Email enviado para: ${response.emailEnviado}`,
+        icon: 'error',
+        title: 'Erro',
+        text: error.response?.data?.error || 'Erro ao enviar email',
         confirmButtonColor: '#8A00C4'
       });
     }
-  } catch (error: any) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Erro',
-      text: error.response?.data?.error || 'Erro ao enviar email',
-      confirmButtonColor: '#8A00C4'
-    });
-  }
- };
+  };
 
   return (
     <div className="relatorio-container">
@@ -127,8 +127,8 @@ export default function Relatorios() {
                   <h1>{rel.titulo}</h1>
                   <span>{new Date(rel.criado_em).toLocaleDateString()}</span>
                 </div>
-                <Button 
-                  label={"Enviar por Email"} 
+                <Button
+                  label={"Enviar por Email"}
                   onClick={() => handleEnviarEmail(rel.id, rel.titulo)}
                 />
               </summary>
@@ -136,7 +136,7 @@ export default function Relatorios() {
                 className="relatorio-body"
                 style={{ whiteSpace: "pre-line" }}
               >
-                <p>{rel.conteudo}</p>
+                <p>{Array.isArray(rel.conteudo) ? rel.conteudo.join("\n\n") : rel.conteudo}</p>
               </div>
             </details>
           ))}

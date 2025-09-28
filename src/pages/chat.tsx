@@ -4,7 +4,7 @@ import Mensagem from "../types/mensagem";
 import { Button } from "../components/button";
 import feather from "feather-icons";
 import {
-  buscarRelatoriosGerais,
+  //buscarRelatoriosGerais,
   buscarRelatoriosSkus,
 } from "../services/axiosService";
 
@@ -45,15 +45,22 @@ export default function Chat() {
       // =========================
       // Aqui está o "roteador"
       // =========================
-      if (input.toLowerCase().includes("relatório geral")) {
-        const dados = await buscarRelatoriosGerais();
-        resposta = JSON.stringify(dados, null, 2); // formata como JSON legível
-      } else if (input.toLowerCase().includes("relatório por sku")) {
+      // if (input.toLowerCase().includes("relatório geral")) {
+      //   const dados = await buscarRelatoriosGerais();
+      //   resposta = JSON.stringify(dados, null, 2); // formata como JSON legível
+      /*} else*/
+      if (input.toLowerCase().includes("relatório por sku")) {
         const dados = await buscarRelatoriosSkus();
-        resposta = JSON.stringify(dados, null, 2);
+
+        if (Array.isArray(dados)) {
+          resposta = dados.map((p: string) => `<p>${p}</p>`).join("");
+        }
+        else {
+          resposta = JSON.stringify(dados, null, 2);
+        }
       } else {
         resposta =
-          "Olá, Você pode obter mais informações sobre os relatórios digitando por 'relatório geral' ou 'relatório por SKU'.";
+          "Olá, Você pode obter mais informações sobre os relatórios digitando por 'relatório por SKU'.";
       }
 
       const botMessage: Mensagem = {
@@ -82,9 +89,8 @@ export default function Chat() {
             key={msg.id}
             className={`chat-bubble ${msg.sender === "me" ? "me" : "other"}`}
             style={{ whiteSpace: "pre-line" }}
-          >
-            {msg.text}
-          </div>
+            dangerouslySetInnerHTML={{ __html: msg.text }}
+          ></div>
         ))}
       </div>
 
