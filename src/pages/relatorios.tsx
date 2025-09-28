@@ -49,6 +49,16 @@ export default function Relatorios() {
      });
 
      if (result.isConfirmed) {
+       // Mostrar loading
+       Swal.fire({
+         title: 'Enviando...',
+         text: 'Aguarde enquanto o email é enviado',
+         allowOutsideClick: false,
+         didOpen: () => {
+           Swal.showLoading();
+         }
+       });
+
        const response = await enviarRelatorioPorEmail(relatorioId);
        
        Swal.fire({
@@ -59,10 +69,20 @@ export default function Relatorios() {
        });
      }
    } catch (error: any) {
+     console.error('Erro ao enviar email:', error);
+     
+     let mensagemErro = 'Erro ao enviar relatório por email';
+     
+     if (error.response?.data?.error) {
+       mensagemErro = error.response.data.error;
+     } else if (error.message) {
+       mensagemErro = error.message;
+     }
+     
      Swal.fire({
        icon: 'error',
        title: 'Erro no envio',
-       text: error.response?.data?.error || 'Erro ao enviar relatório por email',
+       text: mensagemErro,
        confirmButtonColor: '#8A00C4'
      });
    }
