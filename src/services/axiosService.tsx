@@ -4,6 +4,7 @@ import { getToken } from "../utils/auth";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
+
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -107,5 +108,14 @@ export async function buscarRelatoriosDoUsuario() {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
+}
+
+export async function enviarRelatorioPorEmail(relatorioId: number) {
+  const response = await api.post(
+    "/api/relatorio/enviar-email",
+    { relatorioId },
+    { headers: authHeader() }
+  );
   return response.data;
 }

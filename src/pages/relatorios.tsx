@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../styles/relatorio.css";
 import { Button } from "../components/button";
 import Input from "../components/filter-input";
-import { buscarRelatoriosDoUsuario } from "../services/axiosService";
+import { buscarRelatoriosDoUsuario, enviarRelatorioPorEmail } from "../services/axiosService";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 type Filters = {
@@ -33,6 +34,45 @@ export default function Relatorios() {
    const dataOk = filters.data ? r.criado_em.startsWith(filters.data) : true;
    return nomeOk && dataOk;
  });
+
+ const handleEnviarEmail = async (relatorioId: number, tituloRelatorio: string) => {
+  try {
+    const result = await Swal.fire({
+      title: 'Confirmar envio',
+      text: `Enviar "${tituloRelatorio}" por email?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#8A00C4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: 'Enviando...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      const response = await enviarRelatorioPorEmail(relatorioId);
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Sucesso!',
+        text: `Email enviado para: ${response.emailEnviado}`,
+        confirmButtonColor: '#8A00C4'
+      });
+    }
+  } catch (error: any) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro',
+      text: error.response?.data?.error || 'Erro ao enviar email',
+      confirmButtonColor: '#8A00C4'
+    });
+  }
+ };
 
   return (
     <div className="relatorio-container">
@@ -87,7 +127,10 @@ export default function Relatorios() {
                   <h1>{rel.titulo}</h1>
                   <span>{new Date(rel.criado_em).toLocaleDateString()}</span>
                 </div>
-                <Button label={"Enviar por Email"} />
+                <Button 
+                  label={"Enviar por Email"} 
+                  onClick={() => handleEnviarEmail(rel.id, rel.titulo)}
+                />
               </summary>
               <div
                 className="relatorio-body"
