@@ -19,7 +19,7 @@ export function Navbar() {
 
   return (
     <nav className="container">
-      <NavLink to="/">
+      <NavLink to="/home">
         <img src={logo} alt="Logo" className="logo" />
       </NavLink>
       <div className="rotas">
