@@ -36,56 +36,42 @@ export default function Relatorios() {
  });
 
  const handleEnviarEmail = async (relatorioId: number, tituloRelatorio: string) => {
-   try {
-     const result = await Swal.fire({
-       title: 'Confirmar envio',
-       text: `Deseja enviar o relatório "${tituloRelatorio}" por email?`,
-       icon: 'question',
-       showCancelButton: true,
-       confirmButtonColor: '#8A00C4',
-       cancelButtonColor: '#d33',
-       confirmButtonText: 'Sim, enviar!',
-       cancelButtonText: 'Cancelar'
-     });
+  try {
+    const result = await Swal.fire({
+      title: 'Confirmar envio',
+      text: `Enviar "${tituloRelatorio}" por email?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#8A00C4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar'
+    });
 
-     if (result.isConfirmed) {
-       // Mostrar loading
-       Swal.fire({
-         title: 'Enviando...',
-         text: 'Aguarde enquanto o email é enviado',
-         allowOutsideClick: false,
-         didOpen: () => {
-           Swal.showLoading();
-         }
-       });
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: 'Enviando...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
 
-       const response = await enviarRelatorioPorEmail(relatorioId);
-       
-       Swal.fire({
-         icon: 'success',
-         title: 'Email enviado!',
-         text: `Relatório enviado para: ${response.emailEnviado}`,
-         confirmButtonColor: '#8A00C4'
-       });
-     }
-   } catch (error: any) {
-     console.error('Erro ao enviar email:', error);
-     
-     let mensagemErro = 'Erro ao enviar relatório por email';
-     
-     if (error.response?.data?.error) {
-       mensagemErro = error.response.data.error;
-     } else if (error.message) {
-       mensagemErro = error.message;
-     }
-     
-     Swal.fire({
-       icon: 'error',
-       title: 'Erro no envio',
-       text: mensagemErro,
-       confirmButtonColor: '#8A00C4'
-     });
-   }
+      const response = await enviarRelatorioPorEmail(relatorioId);
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Sucesso!',
+        text: `Email enviado para: ${response.emailEnviado}`,
+        confirmButtonColor: '#8A00C4'
+      });
+    }
+  } catch (error: any) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro',
+      text: error.response?.data?.error || 'Erro ao enviar email',
+      confirmButtonColor: '#8A00C4'
+    });
+  }
  };
 
   return (
