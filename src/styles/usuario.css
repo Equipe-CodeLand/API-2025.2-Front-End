@@ -256,3 +256,7 @@ body, html {
       font-size: 0.85rem;
   }
 }
+
+.checkbox-label-edit {
+  margin-left: 8px;
+}

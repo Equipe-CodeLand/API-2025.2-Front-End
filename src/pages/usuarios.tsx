@@ -110,7 +110,9 @@ const handleDelete = async (id: number) => {
 
   const handleEditClick = (usuario: any) => {
     setEditId(usuario.id);
-    setEditData({ ...usuario });
+    // Não incluir a senha do usuário no editData para evitar problemas
+    const { password, ...usuarioSemSenha } = usuario;
+    setEditData({ ...usuarioSemSenha });
   };
 
   const handleCancelEdit = () => {
@@ -187,6 +189,7 @@ const handleDelete = async (id: number) => {
             />
 
             <select
+              title="Filtro por cargo"
               value={filters.cargo}
               onChange={(e) => handleFilterChange("cargo", e.target.value)}
             >
@@ -208,9 +211,8 @@ const handleDelete = async (id: number) => {
       <div className="usuario-listing-content">
         {usuariosFiltrados.map((usuario) => (
           <div className="usuario-content" key={usuario.id}>
-            <details className="usuario-details">
-              <summary className="usuario-summary">
-
+            <div className="usuario-details">
+              <div className="usuario-summary">
                 <div className="usuario-summary-left">
                   {editId === usuario.id ? (
                     <>
@@ -220,6 +222,7 @@ const handleDelete = async (id: number) => {
                         onChange={(e) => handleEditChange("nome", e.target.value)}
                       />
                       <select
+                        title="Selecionar cargo do usuário"
                         value={editData.cargo}
                         onChange={(e) => handleEditChange("cargo", e.target.value)}
                       >
@@ -234,7 +237,7 @@ const handleDelete = async (id: number) => {
                         value={editData.email}
                         onChange={(e) => handleEditChange("email", e.target.value)}
                       />
-                      <label style={{ marginLeft: "8px" }}>
+                      <label className="checkbox-label-edit">
                         <input
                           type="checkbox"
                           checked={editData.receberEmails}
@@ -266,9 +269,8 @@ const handleDelete = async (id: number) => {
                     </>
                   )}
                 </div>
-              </summary>
-
-            </details>
+              </div>
+            </div>
           </div>
         ))}
 

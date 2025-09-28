@@ -59,11 +59,8 @@ export async function listarUsuario(id: number) {
 }
 
 export async function deletarUsuario(id: number) {
-  const token = sessionStorage.getItem("token");
   const response = await api.delete(`api/usuario/deletar/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: authHeader()
   });
   return response.data;
 }
@@ -79,7 +76,9 @@ export async function atualizarUsuario(
     password?: string;
   }
 ) {
-  const response = await api.put(`api/usuario/atualizar/${id}`, dados);
+  const response = await api.put(`api/usuario/atualizar/${id}`, dados, {
+    headers: authHeader()
+  });
   return response.data;
 }
 
