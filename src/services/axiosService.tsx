@@ -97,7 +97,7 @@ export async function buscarRelatoriosSkus() {
     {},
     { headers: authHeader() },
   );
-  return response.data;
+  return response.data.conteudo;
 }
 
 export async function buscarRelatoriosDoUsuario() {
