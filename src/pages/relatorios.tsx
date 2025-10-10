@@ -9,12 +9,11 @@ import { useNavigate } from "react-router-dom";
 type Filters = {
   nome: string;
   data: string;
-  quantidade: string;
 };
 
 export default function Relatorios() {
   const [relatorios, setRelatorios] = useState<any[]>([]);
-  const [filters, setFilters] = useState({ nome: "", data: "", quantidade: "" });
+  const [filters, setFilters] = useState({ nome: "", data: "" });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,9 +28,31 @@ export default function Relatorios() {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
+  const limparFiltros = () => {
+    setFilters({ nome: "", data: ""});
+  };
+
   const filtrarRelatorios = relatorios.filter((r) => {
     const nomeOk = r.titulo.toLowerCase().includes(filters.nome.toLowerCase());
-    const dataOk = filters.data ? r.criado_em.startsWith(filters.data) : true;
+    
+    const dataOk = (() => {
+      if (!filters.data) return true;
+      
+      let dataRelatorioFormatada = '';
+      
+      if (r.criado_em.includes('/')) {
+        const [dia, mes, ano] = r.criado_em.split('/');
+        dataRelatorioFormatada = `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+      } else {
+        const dataRelatorio = new Date(r.criado_em);
+        const ano = dataRelatorio.getFullYear();
+        const mes = String(dataRelatorio.getMonth() + 1).padStart(2, '0');
+        const dia = String(dataRelatorio.getDate()).padStart(2, '0');
+        dataRelatorioFormatada = `${ano}-${mes}-${dia}`;
+      }
+      
+      return dataRelatorioFormatada === filters.data;
+    })();
     return nomeOk && dataOk;
   });
 
@@ -102,14 +123,12 @@ export default function Relatorios() {
               value={filters.data}
               onChange={(e) => handleChange("data", e.target.value)}
             />
-            <Input
-              type={"number"}
-              placeholder="Quantidade"
-              value={filters.quantidade}
-              onChange={(e) => handleChange("quantidade", e.target.value)}
-            />
           </div>
           <div className="filter-item">
+            <Button
+              label={"Limpar filtros"}
+              onClick={limparFiltros}
+            />
             <Button
               label={"Novo Relatório"}
               onClick={() => navigate("/chat")}
