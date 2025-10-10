@@ -118,3 +118,27 @@ export async function enviarRelatorioPorEmail(relatorioId: number) {
   );
   return response.data;
 }
+
+export async function atualizarRelatorio(
+  id: number,
+  dados: { titulo: string },
+) {
+  const token = getToken();
+  const response = await api.put(`/api/relatorio/atualizar/${id}`, dados, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+
+export async function excluirRelatorio(relatorioId: number) {
+  const token = getToken();
+  const response = await api.delete(`/api/relatorio/${relatorioId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
