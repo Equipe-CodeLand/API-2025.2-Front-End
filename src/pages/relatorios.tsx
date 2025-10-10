@@ -13,7 +13,7 @@ type Filters = {
 
 export default function Relatorios() {
   const [relatorios, setRelatorios] = useState<any[]>([]);
-  const [filters, setFilters] = useState({ nome: "", data: "", quantidade: "" });
+  const [filters, setFilters] = useState({ nome: "", data: "" });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,32 +29,11 @@ export default function Relatorios() {
   };
 
   const limparFiltros = () => {
-    setFilters({ nome: "", data: "", quantidade: "" });
+    setFilters({ nome: "", data: ""});
   };
 
   const filtrarRelatorios = relatorios.filter((r) => {
-    const provedoresEmail = ['outlook', 'gmail', 'yahoo', 'hotmail', 'live', 'icloud', 'uol', 'terra'];
-    
-    const nomeOk = (() => {
-      if (!filters.nome) return true;
-      
-      const filterText = filters.nome.toLowerCase();
-      const titulo = r.titulo.toLowerCase();
-      
-      const isBuscandoProvedor = provedoresEmail.some(provedor => 
-        filterText.includes(provedor)
-      );
-      
-      if (isBuscandoProvedor) {
-        return false;
-      }
-      
-      const contemProvedor = provedoresEmail.some(provedor => 
-        titulo.includes(provedor)
-      );
-      
-      return titulo.includes(filterText) && !contemProvedor;
-    })();
+    const nomeOk = r.titulo.toLowerCase().includes(filters.nome.toLowerCase());
     
     const dataOk = (() => {
       if (!filters.data) return true;
