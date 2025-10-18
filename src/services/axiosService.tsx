@@ -118,3 +118,27 @@ export async function enviarRelatorioPorEmail(relatorioId: number) {
   );
   return response.data;
 }
+
+export async function solicitarRelatorio(
+  dataInicio: string,
+  dataFim: string,
+  topicos: string[],
+  incluirTodosSkus: boolean,
+  skus: string[]
+) {
+  const response = await api.post(
+    "/api/relatorio/skus",
+    {},
+    {
+      headers: authHeader(),
+      params: {
+        dataInicio,
+        dataFim,
+        topicos: topicos.join(","),
+        incluirTodosSkus,
+        skus: incluirTodosSkus ? "" : skus.join(","),
+      },
+    }
+  );
+  return response.data.conteudo;
+}
