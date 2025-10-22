@@ -37,6 +37,9 @@ export function Navbar() {
         <NavLink to="/relatorios" className="nav-link">
           Relatórios
         </NavLink>
+                <NavLink to="/meuperfil" className="nav-link">
+          Meu perfil
+        </NavLink>
         <Button label={"Sair"} onClick={handleLogout} />
       </div>
     </nav>

@@ -142,3 +142,8 @@ export async function excluirRelatorio(relatorioId: number) {
   });
   return response.data;
 }
+
+export async function obterUsuarioAtual() {
+  const response = await api.get("api/usuario/atual");
+  return response.data;
+}
