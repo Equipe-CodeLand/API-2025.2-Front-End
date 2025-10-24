@@ -15,13 +15,13 @@ export default function SolicitarRelatorio() {
 
   // 🔹 Mapeamento entre nomes do back e labels do front
   const topicosDisponiveis = [
-    { key: "estoque_consumido", label: "Estoque consumido em toneladas" },
-    { key: "frequencia_compra", label: "Frequência de compra em meses" },
-    { key: "aging_medio", label: "Aging médio do estoque em semanas" },
-    { key: "num_clientes", label: "Quantidades de clientes que consomem o SKU" },
-    { key: "skus_alto_giro_sem_estoque", label: "SKUs de alto giro sem estoque" },
-    { key: "itens_repor", label: "Itens a repor" },
-    { key: "risco_desabastecimento", label: "Risco de desabastecimento do SKU" },
+    { key: "1. Estoque consumido (ton)", label: "Estoque consumido em toneladas" },
+    { key: "2. Frequência de compra (meses)", label: "Frequência de compra em meses" },
+    { key: "3. Aging médio do estoque (semanas)", label: "Aging médio do estoque em semanas" },
+    { key: "4. Nº clientes distintos", label: "Quantidades de clientes que consomem o SKU" },
+    { key: "5. SKUs de alto giro sem estoque", label: "SKUs de alto giro sem estoque" },
+    { key: "6. Itens a repor", label: "Itens a repor" },
+    { key: "7. Risco de desabastecimento", label: "Risco de desabastecimento do SKU" },
   ];
 
   const toggleTopico = (key: string) => {
@@ -102,7 +102,7 @@ export default function SolicitarRelatorio() {
 
     try {
       setEnviando(true);
-      const conteudo = await solicitarRelatorio(
+      const response = await solicitarRelatorio(
         dataInicio,
         dataFim,
         topicosSelecionados, // ✅ envia as keys corretas para o backend
@@ -118,7 +118,7 @@ export default function SolicitarRelatorio() {
       });
 
       setEnviando(false);
-      setMensagem(conteudo);
+      setMensagem(response.conteudo);
     } catch (error: any) {
       Swal.fire({
         icon: "error",
