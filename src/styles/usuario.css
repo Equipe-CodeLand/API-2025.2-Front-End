@@ -117,7 +117,7 @@ body, html {
 
 .usuario-summary-left {
   display: grid;
-  grid-template-columns: 250px 170px 300px 170px;
+  grid-template-columns: 230px 150px 280px 170px;
   gap: 30px;
   font-size: 1rem;
   color: #fff;

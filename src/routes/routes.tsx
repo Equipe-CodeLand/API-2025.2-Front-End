@@ -9,6 +9,8 @@ import { isAuthenticated } from '../utils/auth';
 import CadastroUsuario from '../pages/cadastroUsuario';
 import Relatorios from '../pages/relatorios';
 import Usuarios from '../pages/usuarios';
+import FormsSolicitarRelatorio from '../pages/formsGerarRelatorio';
+import MeuPerfil from '../pages/meuPerfil';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return isAuthenticated() ? <>{children}</> : <Navigate to="/login" />;
@@ -54,11 +56,27 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
        />
+      <Route
+        path="/solicitar/relatorio"
+        element={
+          <ProtectedRoute>
+            <FormsSolicitarRelatorio />
+          </ProtectedRoute>
+        }
+      />
       <Route 
         path="/usuarios" 
         element={
           <ProtectedRoute>
             <Usuarios />
+          </ProtectedRoute>
+        }
+       />
+             <Route 
+        path="/meuperfil" 
+        element={
+          <ProtectedRoute>
+            <MeuPerfil />
           </ProtectedRoute>
         }
        />

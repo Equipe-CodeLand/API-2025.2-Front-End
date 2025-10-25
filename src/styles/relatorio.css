@@ -140,3 +140,84 @@
     font-size: 18px;
   }
 }
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.topic-button {
+  background: #171818;
+  color: #ccc;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.topic-button:hover {
+  border-color: #8A00C4;
+  color: #fff;
+}
+
+.topic-button.selected {
+  background: #8A00C4;
+  color: white;
+  border-color: #8A00C4;
+  box-shadow: 0 0 5px #8A00C4;
+}
+
+.sku-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.add-sku-button {
+  background: #8A00C4;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-sku-button:hover {
+  background: #6b0099;
+}
+
+.sku-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.sku-chip {
+  display: flex;
+  align-items: center;
+  background: #2b2b2b;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.sku-chip b {
+  margin: 0 8px;
+}
+.remove-sku {
+  background: none;
+  border: none;
+  color: #ff7070;
+  font-size: 1.5rem;
+  margin-left: 6px;
+  cursor: pointer;
+  width: auto;
+}
