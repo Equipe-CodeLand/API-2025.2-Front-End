@@ -52,7 +52,14 @@ button {
     text-align: center;
 }
 
-/* ...existing code... */
+.login-error.success {
+  color: #8bc34a;
+}
+
+.login-title {
+  color: #ffffff;
+  margin-bottom: 20px;
+}
 
 .input-group {
   margin-bottom: 15px;
@@ -68,9 +75,9 @@ button {
 
 .remember-forgot {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* centraliza o link */
   margin-bottom: 15px;
-  width: 100%;
+  width: auto; /* não ocupa toda a largura */
 }
 
 .remember-me {

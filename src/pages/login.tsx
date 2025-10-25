@@ -69,6 +69,10 @@ export default function Login() {
       />
         <button type="submit">LOG IN</button>
       </form>
+      <div className="remember-forgot">
+        <div />
+        <a className="forgot-password" href="/esqueci-senha">Esqueci minha senha</a>
+      </div>
       {error && <p className="login-error">{error}</p>}
     </div>
   );
