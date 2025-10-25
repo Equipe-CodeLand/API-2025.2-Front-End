@@ -131,7 +131,7 @@ export default function Relatorios() {
             />
             <Button
               label={"Novo Relatório"}
-              onClick={() => navigate("/chat")}
+              onClick={() => navigate("/solicitar/relatorio")}
             />
           </div>
         </div>

@@ -13,7 +13,7 @@ export const api = axios.create({
 });
 
 export const relatorioApi = axios.create({
-  baseURL: "http://localhost:5000", 
+  baseURL: "http://localhost:5000",
   headers: {
     "Content-Type": "application/json",
   },
@@ -116,5 +116,34 @@ export async function enviarRelatorioPorEmail(relatorioId: number) {
     { relatorioId },
     { headers: authHeader() }
   );
+  return response.data;
+}
+
+export async function solicitarRelatorio(
+  dataInicio: string,
+  dataFim: string,
+  topicos: string[],
+  incluirTodosSkus: boolean,
+  skus: string[]
+) {
+  const requestBody = {
+    data_inicio: dataInicio,
+    data_fim: dataFim,
+    topicos,
+    incluir_todos_skus: incluirTodosSkus,
+    skus: incluirTodosSkus ? [] : skus
+  };
+
+  const response = await api.post(
+    "/api/relatorio/skus",
+    requestBody,
+    {
+      headers: {
+        ...authHeader(),
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
   return response.data;
 }
