@@ -3,6 +3,8 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from '../pages/home';
 import Chat from '../pages/chat';
 import Login from '../pages/login';
+import EsqueciSenha from '../pages/esqueciSenha';
+import ResetSenha from '../pages/resetSenha';
 import { isAuthenticated } from '../utils/auth';
 import CadastroUsuario from '../pages/cadastroUsuario';
 import Relatorios from '../pages/relatorios';
@@ -17,6 +19,8 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+      <Route path="/reset-senha" element={<ResetSenha />} />
       <Route path="/" element={<Navigate to="/login" />} />
       <Route 
         path="/home" 

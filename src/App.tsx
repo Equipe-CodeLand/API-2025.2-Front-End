@@ -5,7 +5,8 @@ import { AppRoutes } from './routes/routes';
 
 function App() {
   const location = useLocation();
-  const hideNavbar = location.pathname === '/' || location.pathname === '/login';
+  const publicPaths = ['/', '/login', '/esqueci-senha', '/reset-senha'];
+  const hideNavbar = publicPaths.includes(location.pathname);
 
   return (
     <>

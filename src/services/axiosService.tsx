@@ -48,6 +48,16 @@ export async function cadastrarUsuario(nome: string, email: string, password: st
   return response.data;
 }
 
+export async function forgotPassword(email: string) {
+  const response = await api.post(`/auth/forgot-password`, { email });
+  return response.data;
+}
+
+export async function resetPassword(token: string, password: string) {
+  const response = await api.post(`/auth/reset-password`, { token, password });
+  return response.data;
+}
+
 export async function listarUsuarios() {
   const response = await api.get("api/usuario/listar");
   return response.data;
