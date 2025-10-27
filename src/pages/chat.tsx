@@ -6,6 +6,7 @@ import feather from "feather-icons";
 import {
   //buscarRelatoriosGerais,
   buscarRelatoriosSkus,
+  enviarMensagem,
 } from "../services/axiosService";
 
 export default function Chat() {
@@ -40,32 +41,18 @@ export default function Chat() {
     setInput("");
 
     try {
-      let resposta = "";
+      let respostaBot = "";
 
-      // =========================
-      // Aqui está o "roteador"
-      // =========================
-      // if (input.toLowerCase().includes("relatório geral")) {
-      //   const dados = await buscarRelatoriosGerais();
-      //   resposta = JSON.stringify(dados, null, 2); // formata como JSON legível
-      /*} else*/
-      if (input.toLowerCase().includes("relatório por sku")) {
-        const dados = await buscarRelatoriosSkus();
-
-        if (Array.isArray(dados)) {
-          resposta = dados.map((p: string) => `<p>${p}</p>`).join("");
-        }
-        else {
-          resposta = JSON.stringify(dados, null, 2);
-        }
+      const response = await enviarMensagem(input);
+      if (response && response.resposta) {
+        respostaBot = response.resposta
       } else {
-        resposta =
-          "Olá, Você pode obter mais informações sobre os relatórios digitando por 'relatório por SKU'.";
+        respostaBot = "Desculpe, não consegui entender sua pergunta, tente novamente mais";
       }
 
       const botMessage: Mensagem = {
         id: Date.now() + 1,
-        text: resposta,
+        text: respostaBot,
         sender: "other",
       };
       setMessages((prev) => [...prev, botMessage]);

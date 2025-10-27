@@ -26,11 +26,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export async function enviarMensagem(pergunta: string) {
-  const response = await api.post("/chat", { pergunta });
-  return response.data;
-}
-
 function authHeader() {
   const token = getToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
@@ -108,6 +103,15 @@ export async function buscarRelatoriosSkus() {
     { headers: authHeader() },
   );
   return response.data.conteudo;
+}
+
+export async function enviarMensagem(texto:string) {
+  const response = await api.post(
+    "/api/chat", { texto },
+    { headers: authHeader() },
+  );
+  return response.data;
+
 }
 
 export async function buscarRelatoriosDoUsuario() {
