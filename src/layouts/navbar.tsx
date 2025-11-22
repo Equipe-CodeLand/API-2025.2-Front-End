@@ -26,22 +26,25 @@ export function Navbar() {
         <NavLink to="/home" className="nav-link">
           Início
         </NavLink>
-        <NavLink to="/chat" className="nav-link">
-          Chat
+      <NavLink to="/chat" className="nav-link">
+        Chat
+      </NavLink>
+      {userIsAdmin && ( // Only show "Usuários" link for admins
+        <NavLink to="/usuarios" className="nav-link">
+          Usuários
         </NavLink>
-        {userIsAdmin && ( // Only show "Usuários" link for admins
-          <NavLink to="/usuarios" className="nav-link">
-            Usuários
-          </NavLink>
-        )}
-        <NavLink to="/relatorios" className="nav-link">
-          Relatórios
-        </NavLink>
-                <NavLink to="/meuperfil" className="nav-link">
-          Meu perfil
-        </NavLink>
-        <Button label={"Sair"} onClick={handleLogout} />
-      </div>
-    </nav>
+      )}
+      <NavLink to="/relatorios" className="nav-link">
+        Relatórios
+      </NavLink>
+      <NavLink to="/meuperfil" className="nav-link">
+        Meu perfil
+      </NavLink>
+            <NavLink to="/chats" className="nav-link">
+        Histórico de Chats
+      </NavLink>
+      <Button label={"Sair"} onClick={handleLogout} />
+    </div>
+    </nav >
   );
 }

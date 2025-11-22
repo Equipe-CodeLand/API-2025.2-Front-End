@@ -190,3 +190,43 @@ export async function obterUsuarioAtual() {
   const response = await api.get("api/usuario/atual");
   return response.data;
 }
+
+export async function listarMensagensDoChat(chatId: number) {
+  const response = await api.get(`/api/chat/${chatId}/mensagens`, {
+    headers: authHeader(),
+  });
+
+  return response.data;
+}
+
+export async function listarChats() {
+  const response = await api.get("/api/chats", {
+    headers: authHeader(),
+  });
+  return response.data.chats;
+}
+
+export async function criarChat(primeiraMensagem?: { texto: string }) {
+  const usuarioId = Number(localStorage.getItem("userId"));
+
+  const payload = primeiraMensagem
+    ? { usuario_id: usuarioId, primeira_mensagem: primeiraMensagem.texto }
+    : { usuario_id: usuarioId };
+
+  const response = await api.post("/api/chat/criar", payload, {
+    headers: authHeader(),
+  });
+
+  return response.data;
+}
+
+
+export async function enviarMensagemParaChat(chatId: number, texto: string) {
+  const response = await api.post(
+    "/api/chat",
+    { chat_id: chatId, texto },
+    { headers: authHeader() }
+  );
+
+  return response.data;
+}
