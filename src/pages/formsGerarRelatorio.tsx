@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/relatorio.css";
 import { solicitarRelatorio } from "../services/axiosService";
 import Swal from "sweetalert2";
@@ -10,8 +11,8 @@ export default function SolicitarRelatorio() {
   const [incluirTodosSkus, setIncluirTodosSkus] = useState(true);
   const [skuInput, setSkuInput] = useState("");
   const [skusSelecionados, setSkusSelecionados] = useState<string[]>([]);
-  const [mensagem, setMensagem] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const navigate = useNavigate();
 
   // 🔹 Mapeamento entre nomes do back e labels do front
   const topicosDisponiveis = [
@@ -110,16 +111,19 @@ export default function SolicitarRelatorio() {
         skusSelecionados
       );
 
+      setEnviando(false);
+
       Swal.fire({
         icon: "success",
         title: "Relatório Gerado!",
-        text: "Os dados foram obtidos com sucesso.",
+        text: "O relatório foi gerado e salvo com sucesso.",
         confirmButtonColor: "#8A00C4",
+      }).then(() => {
+        // Navega para a página de relatórios após confirmar
+        navigate("/relatorios");
       });
-
-      setEnviando(false);
-      setMensagem(response.conteudo);
     } catch (error: any) {
+      setEnviando(false);
       Swal.fire({
         icon: "error",
         title: "Erro ao Gerar Relatório",
@@ -220,17 +224,6 @@ export default function SolicitarRelatorio() {
           {enviando ? "Gerando..." : "Gerar Relatório"}
         </button>
       </form>
-
-      <br />
-      {mensagem &&
-        (
-          <div
-            className="relatorio-body"
-            style={{ whiteSpace: "pre-line" }}
-          >
-            <p>{Array.isArray(mensagem) ? mensagem.join("\n\n") : mensagem}</p>
-          </div>
-        )}
     </div>
   );
 }

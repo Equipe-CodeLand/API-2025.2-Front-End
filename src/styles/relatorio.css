@@ -56,6 +56,7 @@
 .filter-content .filter-item{
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 
@@ -114,25 +115,36 @@
   font-size: 14px;
   line-height: 1.5;
   border-top: 1px solid #444;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 @media(max-width:911px){
-.relatorio-container .title-content {
+  .relatorio-container .title-content {
     padding: 0 20px;
   }
 
-.filter-container .filter-content {
+  .filter-container .filter-content {
     justify-content: space-between;
     flex-direction: column;
     padding: 20px;
     gap: 16px;
   }
+  
   .filter-content .filter-item {
     flex-direction: column;
+    width: 100%;
   }
+
+  .filter-content .filter-item button {
+    width: 100%;
+    min-width: 100%;
+  }
+  
   .relatorio-listing-content .relatorio-content {
     padding: 20px;
   }
+  
   .summary-left {
     flex-direction: column;
     justify-content: center;
@@ -220,4 +232,185 @@
   margin-left: 6px;
   cursor: pointer;
   width: auto;
+}
+
+/* Estilos para relatório de assertividade */
+.assertividade-container {
+  background: #2b2b2b;
+  padding: 16px;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.assertividade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #444;
+  flex-wrap: wrap;
+}
+
+.assertividade-title {
+  font-size: 1.3rem;
+  color: #fff;
+  margin: 0;
+}
+
+.assertividade-btn {
+  background: #8A00C4;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.assertividade-btn:hover {
+  background: #6b0099;
+}
+
+.assertividade-resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.resumo-card {
+  background: #2f3337;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #8A00C4;
+}
+
+.resumo-label {
+  font-size: 0.85rem;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.resumo-valor {
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+.classificacao-excelente {
+  color: #4ade80;
+}
+
+.classificacao-bom {
+  color: #60a5fa;
+}
+
+.classificacao-moderado {
+  color: #fbbf24;
+}
+
+.classificacao-critico {
+  color: #ef4444;
+}
+
+.assertividade-detalhes {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #444;
+}
+
+.detalhes-titulo {
+  font-size: 0.95rem;
+  color: #fff;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.skus-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sku-assertividade {
+  background: #2f3337;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-left: 3px solid;
+}
+
+.sku-assert-score {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.score-alto {
+  border-left-color: #4ade80;
+  color: #4ade80;
+}
+
+.score-medio {
+  border-left-color: #fbbf24;
+  color: #fbbf24;
+}
+
+.score-baixo {
+  border-left-color: #ef4444;
+  color: #ef4444;
+}
+
+.assertividade-razoes {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 4px;
+  list-style-position: inside;
+}
+
+.assertividade-razoes li {
+  margin: 2px 0;
+}
+
+.loading-assert {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
+
+@media(max-width:911px){
+  .assertividade-resumo {
+    grid-template-columns: 1fr;
+  }
+  
+  .assertividade-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .assertividade-title {
+    width: 100%;
+  }
+
+  .assertividade-btn {
+    width: 100%;
+  }
+  
+  .sku-assertividade {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.resumo-assert-positivo {
+  color: #4ade80;
+}
+
+.resumo-assert-critico {
+  color: #ef4444;
 }

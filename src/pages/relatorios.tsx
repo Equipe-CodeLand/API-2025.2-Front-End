@@ -7,6 +7,7 @@ import {
   buscarRelatoriosDoUsuario,
   enviarRelatorioPorEmail,
   excluirRelatorio,
+  gerarAssertividadeSkus,
 } from "../services/axiosService";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -21,12 +22,19 @@ export default function Relatorios() {
   const [filters, setFilters] = useState({ nome: "", data: "" });
   const [editId, setEditId] = useState<number | null>(null);
   const [editTitulo, setEditTitulo] = useState<string>("");
+  const [assertividade, setAssertividade] = useState<any>(null);
+  const [loadingAssert, setLoadingAssert] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchRelatorios() {
-      const dados = await buscarRelatoriosDoUsuario();
-      setRelatorios(dados);
+      try {
+        const dados = await buscarRelatoriosDoUsuario();
+        setRelatorios(dados || []);
+      } catch (error) {
+        console.error("Erro ao buscar relatórios:", error);
+        setRelatorios([]);
+      }
     }
     fetchRelatorios();
   }, []);
@@ -230,6 +238,65 @@ export default function Relatorios() {
     });
   };
 
+  const handleGerarAssertividade = async () => {
+    try {
+      setLoadingAssert(true);
+      // Use date range that covers available data (Aug 2025)
+      const result = await gerarAssertividadeSkus(
+        "2025-08-01",  // Start from August 1st
+        "2025-11-30",  // End at Nov 30th to ensure we catch all data
+        true,
+        []
+      );
+      
+      console.log("Resultado assertividade:", result);
+      
+      // Validar resposta
+      if (result && result.resumo) {
+        setAssertividade(result);
+        
+        // Recarregar lista de relatórios após gerar
+        const dadosAtualizados = await buscarRelatoriosDoUsuario();
+        setRelatorios(dadosAtualizados || []);
+        
+        Swal.fire({
+          icon: "success",
+          title: "Sucesso!",
+          text: "Relatório de assertividade gerado e salvo com sucesso",
+          confirmButtonColor: "#8A00C4",
+        });
+      } else if (result && result.status === "sem_dados") {
+        Swal.fire({
+          icon: "info",
+          title: "Sem Dados",
+          text: "Não há dados de SKU disponíveis para o período selecionado.",
+          confirmButtonColor: "#8A00C4",
+        });
+        setAssertividade(null);
+      } else {
+        console.error("Resposta inválida:", result);
+        Swal.fire({
+          icon: "error",
+          title: "Erro",
+          text: "Resposta do servidor inválida ou sem dados",
+          confirmButtonColor: "#8A00C4",
+        });
+        setAssertividade(null);
+      }
+    } catch (error: any) {
+      console.error("Erro ao gerar assertividade:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: error.response?.data?.error || error.message || "Erro ao gerar relatório de assertividade",
+        confirmButtonColor: "#8A00C4",
+      });
+      setAssertividade(null);
+    } finally {
+      setLoadingAssert(false);
+    }
+  };
+
   return (
     <div className="relatorio-container">
       <div className="title-content">
@@ -265,11 +332,100 @@ export default function Relatorios() {
               label={"Novo Relatório"}
               onClick={() => navigate("/solicitar/relatorio")}
             />
+            <Button
+              label={"Assertividade"}
+              onClick={handleGerarAssertividade}
+            />
           </div>
         </div>
       </div>
 
       <div className="relatorio-listing-content">
+        {assertividade && (
+          <div className="assertividade-container">
+            <div className="assertividade-header">
+              <h2 className="assertividade-title">Relatório de Assertividade dos SKUs</h2>
+              <button
+                className="assertividade-btn"
+                onClick={() => setAssertividade(null)}
+              >
+                Fechar
+              </button>
+            </div>
+
+            {loadingAssert ? (
+              <div className="loading-assert">Carregando relatório...</div>
+            ) : assertividade && assertividade.resumo ? (
+              <>
+                <div className="assertividade-resumo">
+                  <div className="resumo-card">
+                    <div className="resumo-label">Classificação Geral</div>
+                    <div className={`resumo-valor classificacao-${assertividade.resumo.classificacao_geral.toLowerCase()}`}>
+                      {assertividade.resumo.classificacao_geral}
+                    </div>
+                  </div>
+                  <div className="resumo-card">
+                    <div className="resumo-label">Média de Assertividade</div>
+                    <div className="resumo-valor">{assertividade.resumo.media_assertividade}%</div>
+                  </div>
+                  <div className="resumo-card">
+                    <div className="resumo-label">SKUs Analisados</div>
+                    <div className="resumo-valor">{assertividade.resumo.total_skus}</div>
+                  </div>
+                  <div className="resumo-card">
+                    <div className="resumo-label">SKUs Assertivos</div>
+                    <div className="resumo-valor resumo-assert-positivo">
+                      {assertividade.resumo.skus_assertivos} ({assertividade.resumo.percentual_assertivo}%)
+                    </div>
+                  </div>
+                  <div className="resumo-card">
+                    <div className="resumo-label">SKUs Críticos</div>
+                    <div className="resumo-valor resumo-assert-critico">
+                      {assertividade.resumo.skus_criticos} ({assertividade.resumo.percentual_critico}%)
+                    </div>
+                  </div>
+                </div>
+
+                <div className="assertividade-detalhes">
+                  <div className="detalhes-titulo">Top 5 Melhores SKUs</div>
+                  <div className="skus-list">
+                    {assertividade.melhores_skus && assertividade.melhores_skus.map((item: any, idx: number) => (
+                      <div key={idx} className="sku-assertividade score-alto">
+                        <span>{item.sku}</span>
+                        <span className="sku-assert-score">{item.score}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {assertividade.piores_skus && assertividade.piores_skus.length > 0 && (
+                  <div className="assertividade-detalhes">
+                    <div className="detalhes-titulo">Top 5 SKUs com Atenção Necessária</div>
+                    <div className="skus-list">
+                      {assertividade.piores_skus.map((item: any, idx: number) => (
+                        <div key={idx} className="sku-assertividade score-baixo">
+                          <div>
+                            <div>{item.sku} - {item.score}%</div>
+                            {item.razoes && item.razoes.length > 0 && (
+                              <ul className="assertividade-razoes">
+                                {item.razoes.map((razao: string, i: number) => (
+                                  <li key={i}>{razao}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="loading-assert">Erro ao carregar assertividade ou sem dados disponíveis</div>
+            )}
+          </div>
+        )}
+
         <div className="relatorio-content">
           {filtrarRelatorios.map((rel) => (
             <details key={rel.id} className="relatorio-details">
@@ -318,13 +474,12 @@ export default function Relatorios() {
                   )}
                 </div>
               </summary>
-              <div
-                className="relatorio-body"
-                style={{ whiteSpace: "pre-line" }}
-              >
+              <div className="relatorio-body">
                 <p>
                   {Array.isArray(rel.conteudo)
                     ? rel.conteudo.join("\n\n")
+                    : typeof rel.conteudo === "object"
+                    ? JSON.stringify(rel.conteudo, null, 2)
                     : rel.conteudo}
                 </p>
               </div>

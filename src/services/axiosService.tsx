@@ -186,6 +186,33 @@ export async function excluirRelatorio(relatorioId: number) {
   return response.data;
 }
 
+export async function gerarAssertividadeSkus(
+  dataInicio: string,
+  dataFim: string,
+  incluirTodosSkus: boolean,
+  skus: string[]
+) {
+  const requestBody = {
+    data_inicio: dataInicio,
+    data_fim: dataFim,
+    incluir_todos_skus: incluirTodosSkus,
+    skus: incluirTodosSkus ? [] : skus
+  };
+
+  const response = await api.post(
+    "/api/relatorio/skus-assertividade",
+    requestBody,
+    {
+      headers: {
+        ...authHeader(),
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  return response.data;
+}
+
 export async function obterUsuarioAtual() {
   const response = await api.get("api/usuario/atual");
   return response.data;
