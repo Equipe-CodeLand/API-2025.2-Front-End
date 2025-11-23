@@ -3,12 +3,12 @@ import "../styles/chat.css";
 import Mensagem from "../types/mensagem";
 import { Button } from "../components/button";
 import feather from "feather-icons";
-import { enviarMensagem, criarChat } from "../services/axiosService"; // <- adicionar criarChat
+import { enviarMensagem, criarChat, enviarMensagemParaChat } from "../services/axiosService";
 
 export default function Chat() {
   const [messages, setMessages] = useState<Mensagem[]>([]);
   const [input, setInput] = useState("");
-  const [chatId, setChatId] = useState<number | null>(null); // <- guarda o chat criado
+  const [chatId, setChatId] = useState<number | null>(null);
 
   useEffect(() => {
     feather.replace();
@@ -29,54 +29,56 @@ export default function Chat() {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    // Cria o chat se ainda não tiver chatId
-    if (!chatId) {
+    const textoEnviar = input;
+    setInput("");
+
+    let currentChatId = chatId;
+
+    if (!currentChatId) {
       try {
-        const chat = await criarChat({ texto: input }); // envia a primeira mensagem
-        setChatId(chat.chat_id); // salva o chatId para próximas mensagens
+        const chat = await criarChat({ texto: textoEnviar });
+        currentChatId = chat.chat_id;
+        setChatId(chat.chat_id);
       } catch (error) {
         console.error("Erro ao criar chat:", error);
+        return;
       }
     }
 
-    // Adiciona mensagem do usuário
     const userMessage: Mensagem = {
       id: Date.now(),
-      text: input,
+      text: textoEnviar,
       sender: "me",
     };
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
 
-    // Envia mensagem para o bot
     try {
-      let respostaBot = "";
+      const response = await enviarMensagemParaChat(currentChatId!, textoEnviar);
 
-      const response = await enviarMensagem(input);
-      if (response && response.resposta) {
-        respostaBot = response.resposta;
-      } else {
-        respostaBot =
-          "Desculpe, não consegui entender sua pergunta, tente novamente mais";
-      }
+      const respostaBot = response.resposta
+        ? response.resposta
+        : "Desculpe, não consegui entender sua pergunta, tente novamente mais";
 
       const botMessage: Mensagem = {
         id: Date.now() + 1,
         text: respostaBot,
         sender: "other",
       };
+
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
+      console.error("Erro ao enviar mensagem:", error);
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 2,
-          text: "Erro ao buscar resposta do servidor.",
+          text: "Erro ao enviar mensagem ao servidor.",
           sender: "other",
         },
       ]);
     }
   };
+
 
   return (
     <div className="chat-container">
