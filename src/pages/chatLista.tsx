@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../styles/chatList.css";
-import { atualizarTituloChat, listarChats } from "../services/axiosService";
+import {
+  atualizarTituloChat,
+  excluirChat,
+  listarChats,
+} from "../services/axiosService";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Button } from "../components/button";
@@ -64,6 +68,27 @@ export default function ChatList() {
     }
   }
 
+  async function handleDelete(chatId: number) {
+    try {
+      await excluirChat(chatId);
+      setChats((prev) => prev.filter((chat) => chat.chat_id !== chatId));
+
+      Swal.fire({
+        title: "Excluído!",
+        text: "O chat foi removido.",
+        icon: "success",
+        confirmButtonColor: "#8A00C4",
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Erro",
+        text: "Não foi possível excluir o chat.",
+        icon: "error",
+        confirmButtonColor: "#8A00C4",
+      });
+    }
+  }
+
   if (loading) return <p className="loading">Carregando chats...</p>;
   return (
     <div className="chat-container">
@@ -88,9 +113,7 @@ export default function ChatList() {
             <p className="no-chats">Nenhum chat encontrado.</p>
           ) : (
             chats.map((chat) => (
-              <div
-                key={chat.chat_id}
-              >
+              <div key={chat.chat_id}>
                 <div className="chat-summary">
                   <div className="chat-summary-left">
                     <h3>Chat #{chat.chat_id}</h3>
@@ -144,12 +167,19 @@ export default function ChatList() {
                         <button
                           className="btn-edit"
                           onClick={(e) => {
-                            e.stopPropagation(); // impede abrir o chat
                             setEditId(chat.chat_id);
                             setEditValue(chat.titulo);
                           }}
                         >
                           Editar
+                        </button>
+                        <button
+                          className="btn-delete"
+                          onClick={(e) => {
+                            handleDelete(chat.chat_id);
+                          }}
+                        >
+                          Excluir
                         </button>
                       </>
                     )}

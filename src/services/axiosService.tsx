@@ -4,7 +4,6 @@ import { getToken } from "../utils/auth";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
-
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -31,7 +30,13 @@ function authHeader() {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-export async function cadastrarUsuario(nome: string, email: string, password: string, cargo: string, receberEmails: boolean) {
+export async function cadastrarUsuario(
+  nome: string,
+  email: string,
+  password: string,
+  cargo: string,
+  receberEmails: boolean,
+) {
   const response = await api.post("api/usuario/cadastrar", {
     nome,
     email,
@@ -65,7 +70,7 @@ export async function listarUsuario(id: number) {
 
 export async function deletarUsuario(id: number) {
   const response = await api.delete(`api/usuario/deletar/${id}`, {
-    headers: authHeader()
+    headers: authHeader(),
   });
   return response.data;
 }
@@ -79,10 +84,10 @@ export async function atualizarUsuario(
     status?: string;
     receberEmails?: boolean;
     password?: string;
-  }
+  },
 ) {
   const response = await api.put(`api/usuario/atualizar/${id}`, dados, {
-    headers: authHeader()
+    headers: authHeader(),
   });
   return response.data;
 }
@@ -105,13 +110,13 @@ export async function buscarRelatoriosSkus() {
   return response.data.conteudo;
 }
 
-export async function enviarMensagem(texto:string) {
+export async function enviarMensagem(texto: string) {
   const response = await api.post(
-    "/api/chat", { texto },
+    "/api/chat",
+    { texto },
     { headers: authHeader() },
   );
   return response.data;
-
 }
 
 export async function buscarRelatoriosDoUsuario() {
@@ -128,7 +133,7 @@ export async function enviarRelatorioPorEmail(relatorioId: number) {
   const response = await api.post(
     "/api/relatorio/enviar-email",
     { relatorioId },
-    { headers: authHeader() }
+    { headers: authHeader() },
   );
   return response.data;
 }
@@ -138,26 +143,22 @@ export async function solicitarRelatorio(
   dataFim: string,
   topicos: string[],
   incluirTodosSkus: boolean,
-  skus: string[]
+  skus: string[],
 ) {
   const requestBody = {
     data_inicio: dataInicio,
     data_fim: dataFim,
     topicos,
     incluir_todos_skus: incluirTodosSkus,
-    skus: incluirTodosSkus ? [] : skus
+    skus: incluirTodosSkus ? [] : skus,
   };
 
-  const response = await api.post(
-    "/api/relatorio/skus",
-    requestBody,
-    {
-      headers: {
-        ...authHeader(),
-        "Content-Type": "application/json"
-      }
-    }
-  );
+  const response = await api.post("/api/relatorio/skus", requestBody, {
+    headers: {
+      ...authHeader(),
+      "Content-Type": "application/json",
+    },
+  });
 
   return response.data;
 }
@@ -174,7 +175,6 @@ export async function atualizarRelatorio(
   });
   return response.data;
 }
-
 
 export async function excluirRelatorio(relatorioId: number) {
   const token = getToken();
@@ -220,12 +220,11 @@ export async function criarChat(primeiraMensagem?: { texto: string }) {
   return response.data;
 }
 
-
 export async function enviarMensagemParaChat(chatId: number, texto: string) {
   const response = await api.post(
     "/api/chat",
     { chat_id: chatId, texto },
-    { headers: authHeader() }
+    { headers: authHeader() },
   );
 
   return response.data;
@@ -236,6 +235,14 @@ export async function atualizarTituloChat(chatId: number, titulo: string) {
     `/api/chat/${chatId}/titulo`,
     { titulo },
     { headers: authHeader() },
+  );
+  return response.data;
+}
+
+export async function excluirChat(id: number) {
+  const response = await api.delete(
+    `/api/chat/${id}`, 
+    { headers: authHeader()},
   );
   return response.data;
 }
