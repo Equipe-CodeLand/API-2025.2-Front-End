@@ -230,3 +230,12 @@ export async function enviarMensagemParaChat(chatId: number, texto: string) {
 
   return response.data;
 }
+
+export async function atualizarTituloChat(chatId: number, titulo: string) {
+  const response = await api.put(
+    `/api/chat/${chatId}/titulo`,
+    { titulo },
+    { headers: authHeader() },
+  );
+  return response.data;
+}
